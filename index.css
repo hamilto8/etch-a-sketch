@@ -1,0 +1,70 @@
+html{
+    height: 100%;
+}
+
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: .8em;
+    color: white;
+    min-height: 100%;
+    display: grid;
+    margin: 0;
+    padding: 0;
+    grid-template-rows: 1fr auto;
+}
+
+#navbar{
+    /* display: inline-block; */
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: rgb(99, 1, 1);
+    height: 40px;
+    width: 100%;
+    padding-bottom: 2px;
+}
+
+#navbar img{
+    margin-top: 5px;
+    margin-left: 15px;
+}
+
+#navbar ul{
+    display: inline;
+}
+
+#navbar li{
+    padding: 0px 10px 0px 10px;
+    display: inline;
+}
+
+#name{
+    font-family: 'Gayathri';
+}
+#sub{
+    font-family: 'Faster One';
+}
+
+#container{
+    /* position: absolute; */
+    /* display: block; */
+    /* margin-top: -88%; */
+    grid-row-start: 2;
+    grid-row-end: 3;
+    margin: 0 auto;
+    color: black;
+    max-width: 544px;
+}
+
+#container div{
+    display: inline-grid;
+    margin: 1px;
+    height: 32px;
+    width: 32px;
+    background-color: rgb(223, 223, 223);
+}
+
+#footer{
+    background-color: rgb(99, 1, 1);
+    text-align: center;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
