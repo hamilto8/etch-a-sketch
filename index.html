@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
     <link rel="stylesheet" href="./index.css">
     <link rel="shortcut icon" href="./images/etch.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Faster+One|Gayathri&display=swap" rel="stylesheet">
@@ -12,11 +13,19 @@
 <body>
     <nav id="navbar">
         <img src="./images/etch.png" alt="">
-        <span id="name">Etch a Sketch </span> 
-        <span id="sub">Turbo Alpha</span>
         <ul>
-            <li>About</li>
-            <li>Home</li>
+            <li>
+                Choose Grid Size:
+            </li>
+            <li>
+                <button class="eight">8x8</button>
+            </li>
+            <li>
+                <button class="sixteen">16x16</button>
+            </li>
+            <li>
+                <button class="thirty_two">32x23</button>
+            </li>
             <li>
                 <button id="reset">Reset</button>
             </li>
@@ -29,12 +38,14 @@
         </ul>
     </nav>
     <div id="container">
-       
+        <div class="screen">
 
+        </div>
+        <div class="footer">
+            2019 Michael Hamilton
+        </div>
     </div>
-    <footer id="footer">
-        <p>2019 Michael Hamilton</p>
-    </footer>
+
     <script src="./index.js"></script>
 </body>
 </html>

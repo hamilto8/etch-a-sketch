@@ -1,27 +1,55 @@
 window.onload = ()=>{
-    const container = document.querySelector("#container");
+    const screen = document.querySelector(".screen");
     const reset = document.querySelector("#reset");
     const randomBtn = document.querySelector("#random");
     const blackBtn = document.querySelector("#blackBtn");
+    const eight = document.querySelector(".eight");
+    const sixteen = document.querySelector(".sixteen");
+    const thirty_two = document.querySelector(".thirty_two");
+    let num = 8;
     let black = true;
     let div;
     let tile;
 
-    for(let i = 0; i < (16*16); i++){
-        container.appendChild(document.createElement("div"));
+    for (let i = 0; i < (num*num); i++){
+        screen.appendChild(document.createElement('div'));
     }
-    div = container.childNodes;
+
+    screen.style.display = 'grid';
+    screen.style.gridTemplateRows = `repeat(${num}, 1fr)`;
+    screen.style.gridTemplateColumns = `repeat(${num}, 1fr)`;
+    screen.style.gridGap = ".2em";
+
+    div = screen.childNodes;
+
     for (let i = 1; i < div.length; i++){
         div[i].classList.add(`tile`);
     }
+
     tile = document.querySelectorAll(".tile");
+
     for(let i = 0; i < tile.length; i++){
         tile[i].addEventListener('mouseenter', (e)=>{makeBlack(e)})
     }
 
+    function makeTiles(){
+        div = screen.childNodes;
+
+        for (let i = 1; i < div.length; i++){
+            div[i].classList.add(`tile`);
+        }
+
+        tile = document.querySelectorAll(".tile");
+
+        for(let i = 0; i < tile.length; i++){
+            tile[i].addEventListener('mouseenter', (e)=>{makeBlack(e)})
+        }
+    }
+
+    
+
     blackBtn.addEventListener('click', ()=>{
         black = true;
-        console.log(black);
     })
 
     function makeBlack(e){
@@ -59,4 +87,46 @@ window.onload = ()=>{
             e.target.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
         }
     }
+
+    eight.addEventListener('click',()=>{
+        black = true;
+        num = 8;
+        while (screen.firstChild){
+            screen.removeChild(screen.firstChild);
+        }
+        for (let i = 0; i < (num*num); i++){
+            screen.appendChild(document.createElement('div'));
+        }
+        screen.style.gridTemplateRows = `repeat(${num}, 1fr)`;
+        screen.style.gridTemplateColumns = `repeat(${num}, 1fr)`;
+        makeTiles();
+    });
+
+    sixteen.addEventListener('click',()=>{
+        black = true;
+        num = 16;
+        while (screen.firstChild){
+            screen.removeChild(screen.firstChild);
+        }
+        for (let i = 0; i < (num*num); i++){
+            screen.appendChild(document.createElement('div'));
+        }
+        screen.style.gridTemplateRows = `repeat(${num}, 1fr)`;
+        screen.style.gridTemplateColumns = `repeat(${num}, 1fr)`;
+        makeTiles();
+    });
+
+    thirty_two.addEventListener('click',()=>{
+        black = true;
+        num = 32;
+        while (screen.firstChild){
+            screen.removeChild(screen.firstChild);
+        }
+        for (let i = 0; i < (num*num); i++){
+            screen.appendChild(document.createElement('div'));
+        }
+        screen.style.gridTemplateRows = `repeat(${num}, 1fr)`;
+        screen.style.gridTemplateColumns = `repeat(${num}, 1fr)`;
+        makeTiles();
+    });
 }
