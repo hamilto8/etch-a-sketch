@@ -83,6 +83,17 @@ button:hover{
     background-color: #ddd;
 }
 
+#random{
+    background: rgba(255,175,89,1);
+background: -moz-linear-gradient(left, rgba(255,175,89,1) 0%, rgba(255,240,254,1) 21%, rgba(255,181,214,1) 46%, rgba(181,244,255,1) 65%, rgba(178,255,195,1) 82%, rgba(255,76,142,1) 100%);
+background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255,175,89,1)), color-stop(21%, rgba(255,240,254,1)), color-stop(46%, rgba(255,181,214,1)), color-stop(65%, rgba(181,244,255,1)), color-stop(82%, rgba(178,255,195,1)), color-stop(100%, rgba(255,76,142,1)));
+background: -webkit-linear-gradient(left, rgba(255,175,89,1) 0%, rgba(255,240,254,1) 21%, rgba(255,181,214,1) 46%, rgba(181,244,255,1) 65%, rgba(178,255,195,1) 82%, rgba(255,76,142,1) 100%);
+background: -o-linear-gradient(left, rgba(255,175,89,1) 0%, rgba(255,240,254,1) 21%, rgba(255,181,214,1) 46%, rgba(181,244,255,1) 65%, rgba(178,255,195,1) 82%, rgba(255,76,142,1) 100%);
+background: -ms-linear-gradient(left, rgba(255,175,89,1) 0%, rgba(255,240,254,1) 21%, rgba(255,181,214,1) 46%, rgba(181,244,255,1) 65%, rgba(178,255,195,1) 82%, rgba(255,76,142,1) 100%);
+background: linear-gradient(to right, rgba(255,175,89,1) 0%, rgba(255,240,254,1) 21%, rgba(255,181,214,1) 46%, rgba(181,244,255,1) 65%, rgba(178,255,195,1) 82%, rgba(255,76,142,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf59', endColorstr='#ff4c8e', GradientType=1 );
+}
+
 .footer{
     background-color: rgb(99, 1, 1);
     text-align: center;
