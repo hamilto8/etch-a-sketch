@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     color: '#1a1a1a',
     hoverMode: true,
     isDrawing: false,
+    theme: 'silver', // 'silver' | 'neon'
+    cursorX: 8,
+    cursorY: 8,
     knobAngleX: 0,
     knobAngleY: 0
   };
@@ -23,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const colorPicker = document.getElementById('colorPicker');
   const colorHex = document.getElementById('colorHex');
   const drawModeBtn = document.getElementById('drawModeBtn');
+  const themeBtn = document.getElementById('themeBtn');
   const clearBtn = document.getElementById('clearBtn');
   const knobLeft = document.getElementById('knobLeft');
   const knobRight = document.getElementById('knobRight');
@@ -37,12 +41,45 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
+   * Helper to get a tile at specific coordinates (O(1) lookup)
+   */
+  function getTileAt(x, y) {
+    if (x < 0 || x >= state.size || y < 0 || y >= state.size) return null;
+    return screen.children[y * state.size + x];
+  }
+
+  /**
+   * Remove stylus visual indicator from current tile
+   */
+  function removeStylus() {
+    const currentStylus = screen.querySelector('.tile.stylus-tip');
+    if (currentStylus) {
+      currentStylus.classList.remove('stylus-tip');
+    }
+  }
+
+  /**
+   * Add stylus visual indicator to the active tile
+   */
+  function updateStylus() {
+    removeStylus();
+    const activeTile = getTileAt(state.cursorX, state.cursorY);
+    if (activeTile) {
+      activeTile.classList.add('stylus-tip');
+    }
+  }
+
+  /**
    * Initialize Grid with DocumentFragment for optimal rendering performance
    */
   function createGrid(size) {
     state.size = size;
     gridSizeLabel.textContent = `${size} x ${size}`;
     gridSlider.value = size;
+
+    // Reset stylus to center
+    state.cursorX = Math.floor(size / 2);
+    state.cursorY = Math.floor(size / 2);
 
     // Update active state on quick buttons
     sizeButtons.forEach(btn => {
@@ -65,22 +102,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Clean replacement of existing children
     screen.replaceChildren(fragment);
+
+    // Render stylus tip initial position
+    updateStylus();
   }
 
   /**
    * Color application logic based on selected drawing mode
    */
-  function applyColor(tile) {
+  function applyColor(tile, syncCursor = true) {
     if (!tile || !tile.classList.contains('tile')) return;
 
     if (state.mode === 'eraser') {
       tile.style.removeProperty('background-color');
       tile.style.removeProperty('opacity');
       delete tile.dataset.darkness;
-      return;
-    }
-
-    if (state.mode === 'shader') {
+    } else if (state.mode === 'shader') {
       let currentDarkness = parseInt(tile.dataset.darkness || '0', 10);
       if (currentDarkness < 10) {
         currentDarkness += 1;
@@ -100,18 +137,29 @@ document.addEventListener('DOMContentLoaded', () => {
       delete tile.dataset.darkness;
     }
 
-    animateKnobs();
+    // Sync state cursor position if drawing with mouse/touch hover
+    if (syncCursor) {
+      const index = Array.from(screen.children).indexOf(tile);
+      if (index !== -1) {
+        state.cursorX = index % state.size;
+        state.cursorY = Math.floor(index / state.size);
+        updateStylus();
+      }
+    }
   }
 
   /**
-   * Rotate knobs slightly on each draw action to simulate physical mechanism
+   * Rotate knobs slightly on draw actions to simulate physical mechanism
    */
-  function animateKnobs() {
-    state.knobAngleX += (Math.random() > 0.5 ? 8 : -8);
-    state.knobAngleY += (Math.random() > 0.5 ? 8 : -8);
-    
-    if (knobLeft) knobLeft.style.transform = `rotate(${state.knobAngleX}deg)`;
-    if (knobRight) knobRight.style.transform = `rotate(${state.knobAngleY}deg)`;
+  function rotateKnob(axis, direction = 1) {
+    const delta = direction * 15;
+    if (axis === 'x') {
+      state.knobAngleX += delta;
+      if (knobLeft) knobLeft.style.transform = `rotate(${state.knobAngleX}deg)`;
+    } else {
+      state.knobAngleY += delta;
+      if (knobRight) knobRight.style.transform = `rotate(${state.knobAngleY}deg)`;
+    }
   }
 
   /**
@@ -129,6 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
       tiles[i].style.removeProperty('opacity');
       delete tiles[i].dataset.darkness;
     }
+
+    // Keep stylus active at current spot
+    updateStylus();
 
     etchCasing.addEventListener('animationend', () => {
       etchCasing.classList.remove('shake-animation');
@@ -170,6 +221,133 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   /* ==========================================================================
+     Keyboard Controls (Arrow keys & WASD to draw)
+     ========================================================================== */
+  window.addEventListener('keydown', (e) => {
+    const key = e.key.toLowerCase();
+    let dx = 0;
+    let dy = 0;
+    let handled = false;
+
+    if (key === 'arrowleft' || key === 'a') {
+      dx = -1;
+      rotateKnob('x', -1);
+      handled = true;
+    } else if (key === 'arrowright' || key === 'd') {
+      dx = 1;
+      rotateKnob('x', 1);
+      handled = true;
+    } else if (key === 'arrowup' || key === 'w') {
+      dy = -1;
+      rotateKnob('y', -1);
+      handled = true;
+    } else if (key === 'arrowdown' || key === 's') {
+      dy = 1;
+      rotateKnob('y', 1);
+      handled = true;
+    }
+
+    if (handled) {
+      e.preventDefault(); // Stop page scrolling
+      
+      state.cursorX = Math.max(0, Math.min(state.size - 1, state.cursorX + dx));
+      state.cursorY = Math.max(0, Math.min(state.size - 1, state.cursorY + dy));
+      
+      updateStylus();
+      
+      const currentTile = getTileAt(state.cursorX, state.cursorY);
+      if (currentTile) {
+        applyColor(currentTile, false);
+      }
+    }
+  });
+
+  /* ==========================================================================
+     Interactive Knobs (Drag / Rotate to Draw)
+     ========================================================================== */
+  function setupInteractiveKnob(knobEl, axis) {
+    if (!knobEl) return;
+
+    let isDragging = false;
+    let startAngle = 0;
+    let currentRotation = 0;
+    let accumulatedDelta = 0;
+    const threshold = 12; // Degrees of drag rotation required to move 1 grid cell
+
+    function getAngle(e) {
+      const rect = knobEl.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      return Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
+    }
+
+    knobEl.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      knobEl.classList.add('dragging');
+      knobEl.setPointerCapture(e.pointerId);
+      startAngle = getAngle(e);
+      currentRotation = axis === 'x' ? state.knobAngleX : state.knobAngleY;
+      accumulatedDelta = 0;
+      e.preventDefault();
+    });
+
+    knobEl.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+
+      const currentAngle = getAngle(e);
+      let angleDiff = currentAngle - startAngle;
+
+      // Handle wrapping discontinuity
+      if (angleDiff > 180) angleDiff -= 360;
+      if (angleDiff < -180) angleDiff += 360;
+
+      const newRotation = currentRotation + angleDiff;
+      knobEl.style.transform = `rotate(${newRotation}deg)`;
+      
+      if (axis === 'x') {
+        state.knobAngleX = newRotation;
+      } else {
+        state.knobAngleY = newRotation;
+      }
+
+      accumulatedDelta += angleDiff;
+      startAngle = currentAngle;
+      currentRotation = newRotation;
+
+      // When rotation exceeds threshold, move drawing stylus
+      if (Math.abs(accumulatedDelta) >= threshold) {
+        const step = Math.sign(accumulatedDelta);
+        accumulatedDelta -= step * threshold;
+
+        if (axis === 'x') {
+          state.cursorX = Math.max(0, Math.min(state.size - 1, state.cursorX + step));
+        } else {
+          // Downwards drag/clockwise moves stylus down (y increases)
+          state.cursorY = Math.max(0, Math.min(state.size - 1, state.cursorY + step));
+        }
+
+        updateStylus();
+        const activeTile = getTileAt(state.cursorX, state.cursorY);
+        if (activeTile) {
+          applyColor(activeTile, false);
+        }
+      }
+    });
+
+    const handleRelease = (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      knobEl.classList.remove('dragging');
+    };
+
+    knobEl.addEventListener('pointerup', handleRelease);
+    knobEl.addEventListener('pointercancel', handleRelease);
+  }
+
+  setupInteractiveKnob(knobLeft, 'x');
+  setupInteractiveKnob(knobRight, 'y');
+
+  /* ==========================================================================
      UI Controls & Tool Event Listeners
      ========================================================================== */
 
@@ -206,6 +384,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Canvas Theme Toggle
+  themeBtn.addEventListener('click', () => {
+    if (state.theme === 'silver') {
+      state.theme = 'neon';
+      themeBtn.textContent = 'Neon Midnight';
+      themeBtn.classList.add('theme-neon');
+      screen.classList.add('neon-midnight');
+      themeBtn.dataset.theme = 'neon';
+
+      // Automatically swap black lines to neon cyan for visibility on dark screen
+      if (state.color === '#1a1a1a' || state.color === '#000000') {
+        state.color = '#00f0ff';
+        colorPicker.value = '#00f0ff';
+        colorHex.textContent = '#00F0FF';
+      }
+    } else {
+      state.theme = 'silver';
+      themeBtn.textContent = 'Retro Silver';
+      themeBtn.classList.remove('theme-neon');
+      screen.classList.remove('neon-midnight');
+      themeBtn.dataset.theme = 'silver';
+
+      // Automatically restore dark color for light background
+      if (state.color === '#00f0ff') {
+        state.color = '#1a1a1a';
+        colorPicker.value = '#1a1a1a';
+        colorHex.textContent = '#1A1A1A';
+      }
+    }
+  });
+
   // Grid Resolution Slider
   gridSlider.addEventListener('input', (e) => {
     const newSize = parseInt(e.target.value, 10);
@@ -227,15 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Clear Action
   clearBtn.addEventListener('click', clearScreen);
-
-  // Interactive Knob clicks (spin for fun)
-  [knobLeft, knobRight].forEach(knob => {
-    if (!knob) return;
-    knob.addEventListener('click', () => {
-      animateKnobs();
-      animateKnobs();
-    });
-  });
 
   // Initialize Default Grid
   createGrid(state.size);
