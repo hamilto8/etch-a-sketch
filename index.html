@@ -3,47 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
-    <link rel="stylesheet" href="./index.css">
+    <meta name="description" content="A premium, interactive Etch a Sketch web application featuring customizable grid resolutions, dynamic drawing modes, color pickers, shading, and smooth micro-animations.">
+    <title>Etch a Sketch | Modern Alpha Edition</title>
+    <!-- Favicon -->
     <link rel="shortcut icon" href="./images/etch.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css?family=Faster+One|Gayathri&display=swap" rel="stylesheet">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Etch a Sketch | Turbo Alpha Edition</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Faster+One&family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="./index.css">
 </head>
 <body>
-    <nav id="navbar">
-        <img src="./images/etch.png" alt="">
-        <ul>
-            <li>
-                Choose Grid Size:
-            </li>
-            <li>
-                <button class="eight">8x8</button>
-            </li>
-            <li>
-                <button class="sixteen">16x16</button>
-            </li>
-            <li>
-                <button class="thirty_two">32x23</button>
-            </li>
-            <li>
-                <button id="reset">Reset</button>
-            </li>
-            <li>
-                <button id="random">Random Color</button>
-            </li>
-            <li>
-                <button id="blackBtn">Black</button>
-            </li>
-        </ul>
-    </nav>
-    <div id="container">
-        <div class="screen">
+    <div class="app-wrapper">
+        <header class="app-header">
+            <div class="logo-container">
+                <img src="./images/etch.png" alt="Etch a Sketch Logo" class="app-logo" onerror="this.style.display='none'">
+                <h1>Etch a Sketch <span class="badge">PRO</span></h1>
+            </div>
+            <p class="subtitle">Experience the classic drawing toy with state-of-the-art web capabilities</p>
+        </header>
 
-        </div>
-        <div class="footer">
-            2019 Michael Hamilton
-        </div>
+        <main class="main-content">
+            <div class="etch-casing" id="etchCasing">
+                <!-- Top Brand Banner on Casing -->
+                <div class="casing-banner">
+                    <span class="gold-text">MAGIC</span> ETCH A SKETCH SCREEN
+                </div>
+
+                <!-- Main Layout: Controls Left/Top + Screen Right/Center -->
+                <div class="casing-body">
+                    <!-- Control Panel -->
+                    <aside class="controls-panel" aria-label="Drawing Tools and Grid Controls">
+                        <!-- Mode Selection -->
+                        <div class="control-group">
+                            <label class="group-label">Drawing Tools</label>
+                            <div class="tools-grid">
+                                <button class="btn tool-btn active" id="colorBtn" data-mode="color" title="Standard Solid Color">
+                                    <span class="btn-icon">🎨</span>
+                                    <span class="btn-text">Color</span>
+                                </button>
+                                <button class="btn tool-btn" id="rainbowBtn" data-mode="rainbow" title="Random Rainbow Colors">
+                                    <span class="btn-icon">🌈</span>
+                                    <span class="btn-text">Rainbow</span>
+                                </button>
+                                <button class="btn tool-btn" id="shaderBtn" data-mode="shader" title="Progressive Pencil Shading (10% darker each pass)">
+                                    <span class="btn-icon">✏️</span>
+                                    <span class="btn-text">Shader</span>
+                                </button>
+                                <button class="btn tool-btn" id="eraserBtn" data-mode="eraser" title="Erase tiles back to canvas color">
+                                    <span class="btn-icon">🧹</span>
+                                    <span class="btn-text">Eraser</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Color Picker & Interaction Mode -->
+                        <div class="control-group">
+                            <label class="group-label" for="colorPicker">Brush Settings</label>
+                            <div class="brush-settings">
+                                <div class="color-picker-wrapper">
+                                    <label for="colorPicker" class="sub-label">Color:</label>
+                                    <input type="color" id="colorPicker" value="#1a1a1a" title="Choose brush color">
+                                    <span id="colorHex" class="color-hex">#1A1A1A</span>
+                                </div>
+                                <div class="interaction-toggle">
+                                    <label class="sub-label">Draw Mode:</label>
+                                    <button class="btn toggle-btn" id="drawModeBtn" data-hover="true" title="Toggle between Hover to Draw and Click & Drag">
+                                        Hover Mode
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grid Size Controls -->
+                        <div class="control-group">
+                            <div class="group-header">
+                                <label class="group-label" for="gridSlider">Grid Resolution</label>
+                                <span class="grid-size-display" id="gridSizeLabel">16 x 16</span>
+                            </div>
+                            <input type="range" id="gridSlider" min="4" max="64" value="16" step="2" class="slider" aria-label="Grid Size Slider">
+                            <div class="quick-size-buttons">
+                                <button class="btn size-btn" data-size="8">8x8</button>
+                                <button class="btn size-btn active" data-size="16">16x16</button>
+                                <button class="btn size-btn" data-size="32">32x32</button>
+                                <button class="btn size-btn" data-size="64">64x64</button>
+                            </div>
+                        </div>
+
+                        <!-- Clear Action -->
+                        <div class="control-group action-group">
+                            <button class="btn clear-btn" id="clearBtn" title="Shake casing and clear drawing canvas">
+                                <span class="btn-icon">⚡</span>
+                                <span class="btn-text">Shake & Clear</span>
+                            </button>
+                        </div>
+                    </aside>
+
+                    <!-- Drawing Screen Frame -->
+                    <section class="screen-container">
+                        <div class="screen-frame">
+                            <div id="screen" class="screen" role="region" aria-label="Etch a Sketch Drawing Canvas">
+                                <!-- Grid tiles dynamically generated by JavaScript -->
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Bottom Knobs -->
+                <div class="knobs-container">
+                    <div class="knob-wrapper">
+                        <div class="knob knob-left" id="knobLeft" role="presentation" title="Left Knob (Horizontal)">
+                            <div class="knob-line"></div>
+                        </div>
+                        <span class="knob-label">HORIZONTAL</span>
+                    </div>
+                    <div class="knob-wrapper">
+                        <div class="knob knob-right" id="knobRight" role="presentation" title="Right Knob (Vertical)">
+                            <div class="knob-line"></div>
+                        </div>
+                        <span class="knob-label">VERTICAL</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <p>&copy; <span id="year">2026</span> Michael Hamilton. Modernized with high-performance web standards.</p>
+        </footer>
     </div>
 
     <script src="./index.js"></script>

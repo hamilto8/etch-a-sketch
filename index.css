@@ -1,107 +1,573 @@
-html, body{
-    position: f;
-    min-height: 100%;
-    min-width: 1080px;
-    margin: 0;
-    padding: 0;
+/* ==========================================================================
+   Modern Etch-a-Sketch Design System & Styles
+   ========================================================================== */
+
+:root {
+  /* Color Palette - Curated High-End Crimson & Gold Theme */
+  --bg-primary: #0f1115;
+  --bg-secondary: #181b20;
+  
+  --casing-grad-top: #df1b31;
+  --casing-grad-bottom: #9c0e1e;
+  --casing-shadow: rgba(0, 0, 0, 0.6);
+  --casing-highlight: rgba(255, 255, 255, 0.25);
+  --casing-border: #740815;
+  
+  --panel-bg: rgba(0, 0, 0, 0.35);
+  --panel-border: rgba(255, 255, 255, 0.12);
+  
+  --screen-frame-bg: #2a2a2a;
+  --screen-bg: #dcdad5;
+  --screen-shadow-inset: inset 0 3px 10px rgba(0, 0, 0, 0.4);
+  
+  --text-main: #ffffff;
+  --text-muted: #a0a6b2;
+  --text-gold: #ffd700;
+  
+  --btn-bg: rgba(255, 255, 255, 0.08);
+  --btn-hover: rgba(255, 255, 255, 0.16);
+  --btn-active-bg: #ffcc00;
+  --btn-active-text: #111;
+  
+  --knob-bg: #f8f9fa;
+  --knob-border: #d1d5db;
+  --knob-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+
+  /* Typography */
+  --font-brand: 'Faster One', cursive;
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
 }
 
-body{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 1em;
-    color: white;
-    background-color: rgb(192, 179, 151);
+/* ==========================================================================
+   Reset & Base Styles
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-button{
-    background-color: rgb(255, 255, 255);
-    height: 80%;
+html, body {
+  min-height: 100vh;
+  width: 100%;
+  background: radial-gradient(circle at 50% 20%, #20242d 0%, var(--bg-primary) 80%);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
 }
 
-button:hover{
-    transition: background-color 0.5s ease;
-    transition: box-shadow 0.2s ease;
-    background-color: rgb(255, 220, 107);
-    box-shadow: 1px 1px 1px 1px rgb(255, 255, 255);
+/* ==========================================================================
+   Layout Wrapper & Header
+   ========================================================================== */
+.app-wrapper {
+  width: 100%;
+  max-width: 1280px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  gap: 1.5rem;
 }
 
-#navbar{
-    /* display: inline-block; */
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    background-color: rgb(99, 1, 1);
-    height: 40px;
-    width: 100%;
-    padding-bottom: 5px;
-    text-align: center;
+.app-header {
+  text-align: center;
+  padding: 0.5rem 0;
 }
 
-#navbar img{
-    float: left;
-    height: 60%;
-    margin-top: 5px;
-    margin-left: 15px;
+.logo-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
 }
 
-#navbar ul{
-    display: inline;
-   
+.app-logo {
+  height: 48px;
+  width: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
-#navbar li{
-    padding: 0px 10px 0px 10px;
-    display: inline;
+.app-header h1 {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #ffcbd1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-#name{
-    font-family: 'Gayathri';
-}
-#sub{
-    display: inline-block;
-}
-
-#container{
-    height: 100%;
-    width: 100%;
-}
-
-.screen{ 
-    height: 600px;
-    width: 800px;
-    border: .3em solid rgb(0, 0, 0);
-    margin: 0 auto;
-    padding: 0;
-    font-size: 10px;
+.badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(255, 65, 108, 0.4);
+  -webkit-text-fill-color: #fff;
 }
 
-.screen > div{
-    height: auto;
-    width: auto;
-    background-color: #eee;
+.subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.screen > div:nth-child(odd){
-    background-color: #ddd;
+/* ==========================================================================
+   Etch a Sketch Casing (The Toy Body)
+   ========================================================================== */
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#random{
-    background: rgba(255,175,89,1);
-background: -moz-linear-gradient(left, rgba(255,175,89,1) 0%, rgba(255,240,254,1) 21%, rgba(255,181,214,1) 46%, rgba(181,244,255,1) 65%, rgba(178,255,195,1) 82%, rgba(255,76,142,1) 100%);
-background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255,175,89,1)), color-stop(21%, rgba(255,240,254,1)), color-stop(46%, rgba(255,181,214,1)), color-stop(65%, rgba(181,244,255,1)), color-stop(82%, rgba(178,255,195,1)), color-stop(100%, rgba(255,76,142,1)));
-background: -webkit-linear-gradient(left, rgba(255,175,89,1) 0%, rgba(255,240,254,1) 21%, rgba(255,181,214,1) 46%, rgba(181,244,255,1) 65%, rgba(178,255,195,1) 82%, rgba(255,76,142,1) 100%);
-background: -o-linear-gradient(left, rgba(255,175,89,1) 0%, rgba(255,240,254,1) 21%, rgba(255,181,214,1) 46%, rgba(181,244,255,1) 65%, rgba(178,255,195,1) 82%, rgba(255,76,142,1) 100%);
-background: -ms-linear-gradient(left, rgba(255,175,89,1) 0%, rgba(255,240,254,1) 21%, rgba(255,181,214,1) 46%, rgba(181,244,255,1) 65%, rgba(178,255,195,1) 82%, rgba(255,76,142,1) 100%);
-background: linear-gradient(to right, rgba(255,175,89,1) 0%, rgba(255,240,254,1) 21%, rgba(255,181,214,1) 46%, rgba(181,244,255,1) 65%, rgba(178,255,195,1) 82%, rgba(255,76,142,1) 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf59', endColorstr='#ff4c8e', GradientType=1 );
+.etch-casing {
+  background: linear-gradient(160deg, var(--casing-grad-top), var(--casing-grad-bottom));
+  border: 4px solid var(--casing-border);
+  border-radius: 36px;
+  padding: 2rem 2.5rem 1.5rem 2.5rem;
+  box-shadow: 
+    0 25px 50px -12px var(--casing-shadow),
+    inset 0 4px 6px var(--casing-highlight),
+    inset 0 -8px 12px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.footer{
-    background-color: rgb(99, 1, 1);
-    text-align: center;
-    position: relative;
-    height: 10px;
-    left: 0;
-    bottom: 0;
-    height: auto;
-    width: 100%;
+.casing-banner {
+  text-align: center;
+  font-family: var(--font-brand);
+  font-size: 1.75rem;
+  color: #ffffff;
+  letter-spacing: 3px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+}
 
+.gold-text {
+  color: var(--text-gold);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.casing-body {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ==========================================================================
+   Control Panel (Left Side Glassmorphism Cards)
+   ========================================================================== */
+.controls-panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-label {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+/* Buttons and Tools */
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: var(--btn-bg);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.btn:hover {
+  background: var(--btn-hover);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.tool-btn.active {
+  background: var(--btn-active-bg);
+  color: var(--btn-active-text);
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+  font-weight: 700;
+}
+
+.btn-icon {
+  font-size: 1.1rem;
+}
+
+/* Brush Settings */
+.brush-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.color-picker-wrapper, .interaction-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.sub-label {
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+input[type="color"] {
+  -webkit-appearance: none;
+  border: none;
+  width: 36px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+}
+
+.color-hex {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+.toggle-btn {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.toggle-btn.active-drag {
+  background: #3b82f6;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+/* Grid Size Controls */
+.grid-size-display {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-gold);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  outline: none;
+  margin: 0.5rem 0;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--text-gold);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  transition: transform 0.15s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.quick-size-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+}
+
+.size-btn {
+  padding: 0.4rem 0.2rem;
+  font-size: 0.75rem;
+}
+
+.size-btn.active {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Clear Button */
+.clear-btn {
+  background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+  color: white;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
+}
+
+.clear-btn:hover {
+  background: linear-gradient(135deg, #ff537b 0%, #ff5e41 100%);
+  box-shadow: 0 6px 20px rgba(255, 65, 108, 0.5);
+}
+
+/* ==========================================================================
+   Drawing Screen Area
+   ========================================================================== */
+.screen-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.screen-frame {
+  background: var(--screen-frame-bg);
+  padding: 1.25rem;
+  border-radius: 20px;
+  box-shadow: 
+    inset 0 4px 12px rgba(0, 0, 0, 0.8),
+    0 2px 4px rgba(255, 255, 255, 0.1);
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: flex;
+}
+
+.screen {
+  background-color: var(--screen-bg);
+  background-image: 
+    radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 0);
+  background-size: 16px 16px;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  box-shadow: var(--screen-shadow-inset);
+  display: grid;
+  overflow: hidden;
+  position: relative;
+  cursor: crosshair;
+  user-select: none;
+  touch-action: none;
+}
+
+/* Individual Grid Tiles */
+.tile {
+  background-color: transparent;
+  transition: background-color 0.05s linear;
+}
+
+/* ==========================================================================
+   Bottom Knobs
+   ========================================================================== */
+.knobs-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  margin-top: 0.5rem;
+}
+
+.knob-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.knob {
+  width: 72px;
+  height: 72px;
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, var(--knob-bg) 60%, #cbd5e1 100%);
+  border: 3px solid var(--knob-border);
+  border-radius: 50%;
+  box-shadow: var(--knob-shadow), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.1s ease-out, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.knob:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7), inset 0 2px 4px rgba(255, 255, 255, 1);
+}
+
+.knob:active {
+  transform: scale(0.96);
+}
+
+.knob-line {
+  width: 4px;
+  height: 28px;
+  background: #94a3b8;
+  border-radius: 2px;
+  position: absolute;
+  top: 8px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.knob-label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ==========================================================================
+   Animations & Shake Effect
+   ========================================================================== */
+@keyframes shakeCasing {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-3px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.shake-animation {
+  animation: shakeCasing 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.app-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding-top: 1rem;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+@media (max-width: 960px) {
+  .casing-body {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .controls-panel {
+    order: 2;
+  }
+  
+  .screen-container {
+    order: 1;
+  }
+
+  .etch-casing {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-wrapper {
+    padding: 0.75rem;
+  }
+  
+  .app-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .knob {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .knob-line {
+    height: 20px;
+    top: 6px;
+  }
 }
