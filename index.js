@@ -328,16 +328,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Touch move support for mobile screens when in drag mode
+  // Touch move support for tablet & mobile screens when drawing directly on canvas
   screen.addEventListener('touchmove', (e) => {
-    if (!state.hoverMode) {
+    if (state.hoverMode || state.isDrawing) {
+      e.preventDefault();
       const touch = e.touches[0];
       const target = document.elementFromPoint(touch.clientX, touch.clientY);
       if (target && target.classList.contains('tile')) {
         applyColor(target);
       }
     }
-  }, { passive: true });
+  }, { passive: false });
 
   /* ==========================================================================
      Keyboard Controls (Arrow keys & WASD to draw)
@@ -382,16 +383,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ==========================================================================
-     Interactive Knobs (Drag / Rotate to Draw)
+     Interactive Knobs (Drag / Rotate to Draw) - Tablet Multi-Touch Optimized
      ========================================================================== */
   function setupInteractiveKnob(knobEl, axis) {
     if (!knobEl) return;
 
     let isDragging = false;
+    let activePointerId = null;
     let startAngle = 0;
     let currentRotation = 0;
     let accumulatedDelta = 0;
-    const threshold = 12; // Degrees of drag rotation required to move 1 grid cell
+
+    // Prevent native iOS Safari scrolling/gestures when touching knobs on iPads/tablets
+    knobEl.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+    }, { passive: false });
 
     function getAngle(e) {
       const rect = knobEl.getBoundingClientRect();
@@ -401,6 +407,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     knobEl.addEventListener('pointerdown', (e) => {
+      // Prevent multi-touch interference on the same knob
+      if (activePointerId !== null) return;
+      activePointerId = e.pointerId;
       isDragging = true;
       knobEl.classList.add('dragging');
       try {
@@ -415,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     knobEl.addEventListener('pointermove', (e) => {
-      if (!isDragging) return;
+      if (!isDragging || e.pointerId !== activePointerId) return;
 
       const currentAngle = getAngle(e);
       let angleDiff = currentAngle - startAngle;
@@ -438,6 +447,9 @@ document.addEventListener('DOMContentLoaded', () => {
       startAngle = currentAngle;
       currentRotation = newRotation;
 
+      // Dynamic threshold scaling: scales smoothly across 8x8 up to 64x64 grids
+      const threshold = Math.max(5, Math.min(14, Math.round(200 / state.size)));
+
       // When rotation exceeds threshold, move drawing stylus
       if (Math.abs(accumulatedDelta) >= threshold) {
         const step = Math.sign(accumulatedDelta);
@@ -459,8 +471,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const handleRelease = (e) => {
-      if (!isDragging) return;
+      if (!isDragging || e.pointerId !== activePointerId) return;
       isDragging = false;
+      activePointerId = null;
       knobEl.classList.remove('dragging');
       try {
         if (knobEl.hasPointerCapture(e.pointerId)) {

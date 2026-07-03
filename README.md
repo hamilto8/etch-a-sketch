@@ -20,7 +20,7 @@ A premium, interactive, and high-performance web-based recreation of the classic
 * **Dual Canvas Themes:** Toggle instantly between **Retro Silver** (classic metallic drawing screen) and **Neon Midnight** (cyberpunk dark mode with glowing cyan and neon lines).
 * **Multi-Modal Interactive Controls:**
   * **Pointer & Touch Hover / Drag:** Toggle between classic **Hover Mode** (draws instantly as you move your pointer across the canvas) or **Click & Drag** (draws only when the pointer is pressed down).
-  * **Draggable Physical Knobs:** Click and drag the left/right mechanical knobs in circular motions; rotational physics calculate angle deltas to translate stylus movement across the grid just like the original toy.
+  * **iPad & Tablet Multi-Touch Knobs:** Designed for tactile two-handed tablet play! Touch and twist the left/right mechanical knobs with your thumbs or fingers on an iPad or tablet screen; independent pointer tracking allows turning both knobs simultaneously without multi-touch interference or page scrolling, with adaptive gear ratio thresholds scaling across resolutions.
   * **Keyboard Navigation:** Draw seamlessly using keyboard Arrow Keys or `WASD` controls, which physically rotate the on-screen knobs and update ARIA values in real-time.
 * **Dynamic Grid Size Resolution:** Select between standard resolutions (`8x8`, `16x16`, `32x32`, `64x64`) or use the slider for a custom grid resolution anywhere between `4x4` and `64x64`.
 * **High Performance Engine:** Utilizes JavaScript **Event Delegation** (one event handler on the parent grid instead of thousands on individual tiles) and **DocumentFragments** for instant O(1) grid regeneration without reflow stutter.
