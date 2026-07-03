@@ -1,0 +1,41 @@
+/**
+ * Design Tokens & CSS Custom Properties
+ * Central repository for color palettes, gradients, shadows, and typography.
+ */
+
+:root {
+  /* Color Palette - Curated High-End Crimson & Gold Theme */
+  --bg-primary: #0f1115;
+  --bg-secondary: #181b20;
+  
+  --casing-grad-top: #df1b31;
+  --casing-grad-bottom: #9c0e1e;
+  --casing-shadow: rgba(0, 0, 0, 0.6);
+  --casing-highlight: rgba(255, 255, 255, 0.25);
+  --casing-border: #740815;
+  
+  --panel-bg: rgba(0, 0, 0, 0.35);
+  --panel-border: rgba(255, 255, 255, 0.12);
+  
+  --screen-frame-bg: #2a2a2a;
+  --screen-bg: #dcdad5;
+  --screen-shadow-inset: inset 0 3px 10px rgba(0, 0, 0, 0.4);
+  
+  --text-main: #ffffff;
+  --text-muted: #a0a6b2;
+  --text-gold: #ffd700;
+  
+  --btn-bg: rgba(255, 255, 255, 0.08);
+  --btn-hover: rgba(255, 255, 255, 0.16);
+  --btn-active-bg: #ffcc00;
+  --btn-active-text: #111;
+  
+  --knob-bg: #f8f9fa;
+  --knob-border: #d1d5db;
+  --knob-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+
+  /* Typography */
+  --font-brand: 'Faster One', cursive;
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}

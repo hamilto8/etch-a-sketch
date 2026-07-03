@@ -1,0 +1,133 @@
+/**
+ * Reset, Base Layout, Ambient Aurora Animation, Header & Footer Styles
+ * Establishes document-level layout systems and vertical scrolling accessibility.
+ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  min-height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  width: 100%;
+  background: radial-gradient(circle at 50% 20%, #1a1e27 0%, var(--bg-primary) 80%);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Ambient Animated Glowing Aurora in Background */
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(223, 27, 49, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 70% 60%, rgba(139, 92, 246, 0.04) 0%, transparent 40%);
+  animation: move-aurora 25s infinite linear;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes move-aurora {
+  0% { transform: rotate(0deg) translate(0px, 0px); }
+  50% { transform: rotate(180deg) translate(-30px, 30px); }
+  100% { transform: rotate(360deg) translate(0px, 0px); }
+}
+
+/* ==========================================================================
+   Layout Wrapper & Header
+   ========================================================================== */
+.app-wrapper {
+  width: 100%;
+  max-width: 1280px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 1.5rem;
+  gap: 1.5rem;
+}
+
+.app-header {
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.logo-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.app-logo {
+  height: 48px;
+  width: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.app-header h1 {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #ffcbd1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(255, 65, 108, 0.4);
+  -webkit-text-fill-color: #fff;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.app-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding-top: 1rem;
+}

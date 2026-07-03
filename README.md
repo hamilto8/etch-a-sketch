@@ -69,7 +69,13 @@ etch-a-sketch/
 │   ├── ui.js            # Control panel, themes, & drawing mode event handlers
 │   └── main.js          # Application entry point & subsystem bootstrap
 ├── index.html           # Semantic HTML5 layout and accessible control structure
-├── index.css            # Responsive CSS3 styles, layout systems, & animations
+├── css/                 # Modular Component-Scoped Stylesheets
+│   ├── variables.css    # Design tokens, colors, & typography
+│   ├── base.css         # Reset, layout wrapper, aurora animation, & footer
+│   ├── casing.css       # Ruby-red toy casing & grid layout
+│   ├── controls.css     # UI cards, buttons, sliders, knobs, & shake animations
+│   ├── screen.css       # Drawing canvas bezel, tiles, & cyberpunk neon theme
+│   └── responsive.css   # Media queries for tablet, iPad, & mobile devices
 ├── LICENSE              # MIT Open Source License
 └── README.md            # Project documentation (this file)
 ```

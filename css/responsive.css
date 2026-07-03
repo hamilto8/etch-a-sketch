@@ -1,0 +1,111 @@
+/**
+ * Responsive Media Queries
+ * Optimizes layout, control scaling, touch targets, and typography for tablets, iPads, and mobile devices.
+ */
+
+@media (max-width: 960px) {
+  .casing-body {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .controls-panel {
+    order: 2;
+  }
+  
+  .screen-container {
+    order: 1;
+  }
+
+  .etch-casing {
+    padding: 1.5rem;
+  }
+
+  /* Optimize knob positioning and size for two-handed tablet grip */
+  .knobs-container {
+    padding: 0 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .knob {
+    width: 80px;
+    height: 80px;
+  }
+
+  .knob-line {
+    height: 30px;
+    top: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-wrapper {
+    padding: 0.75rem;
+  }
+  
+  .app-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .knob {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .knob-line {
+    height: 20px;
+    top: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-wrapper {
+    padding: 0.5rem;
+    gap: 1rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.6rem;
+  }
+  
+  .subtitle {
+    font-size: 0.875rem;
+  }
+
+  .etch-casing {
+    padding: 1rem;
+    border-radius: 20px;
+  }
+
+  .casing-banner {
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+  }
+
+  .controls-panel {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .screen-frame {
+    padding: 0.75rem;
+    border-radius: 12px;
+    background-image: none; /* Hide decorative screws on very small screens to maximize canvas space */
+  }
+
+  .knobs-container {
+    padding: 0 0.5rem;
+  }
+
+  .knob {
+    width: 48px;
+    height: 48px;
+    border-width: 3px;
+  }
+
+  .knob-line {
+    height: 16px;
+    top: 4px;
+    width: 3px;
+  }
+}
