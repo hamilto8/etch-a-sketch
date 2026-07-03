@@ -407,6 +407,27 @@ input[type="color"]::-webkit-color-swatch {
   border-color: rgba(255, 255, 255, 0.4);
 }
 
+/* Save Button */
+.save-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.save-btn:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+}
+
+.save-btn.saved-feedback {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
 /* Clear Button */
 .clear-btn {
   background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);

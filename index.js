@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const colorHex = document.getElementById('colorHex');
   const drawModeBtn = document.getElementById('drawModeBtn');
   const themeBtn = document.getElementById('themeBtn');
+  const saveBtn = document.getElementById('saveBtn');
   const clearBtn = document.getElementById('clearBtn');
   const knobLeft = document.getElementById('knobLeft');
   const knobRight = document.getElementById('knobRight');
@@ -199,6 +200,109 @@ document.addEventListener('DOMContentLoaded', () => {
     etchCasing.addEventListener('animationend', () => {
       etchCasing.classList.remove('shake-animation');
     }, { once: true });
+  }
+
+  /**
+   * Save the current sketch as a high-quality JPG image to local disk
+   */
+  function saveSketch() {
+    if (!saveBtn) return;
+
+    // Visual feedback on button
+    const btnTextEl = saveBtn.querySelector('.btn-text');
+    const originalText = btnTextEl ? btnTextEl.textContent : 'Save Sketch (JPG)';
+    if (btnTextEl) btnTextEl.textContent = 'Saving...';
+    saveBtn.classList.add('saved-feedback');
+
+    setTimeout(() => {
+      try {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const exportSize = 1024; // 1024x1024 resolution
+        canvas.width = exportSize;
+        canvas.height = exportSize;
+
+        // 1. Fill background based on active theme
+        const isNeon = state.theme === 'neon';
+        ctx.fillStyle = isNeon ? '#111317' : '#dcdad5';
+        ctx.fillRect(0, 0, exportSize, exportSize);
+
+        // 2. Draw subtle background grid dot pattern
+        const gridSize = state.size;
+        const tileSize = exportSize / gridSize;
+
+        ctx.fillStyle = isNeon ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.05)';
+        for (let x = 0; x < gridSize; x++) {
+          for (let y = 0; y < gridSize; y++) {
+            const centerX = x * tileSize + tileSize / 2;
+            const centerY = y * tileSize + tileSize / 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        // 3. Draw each colored tile
+        const tiles = screen.children;
+        for (let i = 0; i < tiles.length; i++) {
+          const tile = tiles[i];
+          if (tile.style.backgroundColor || tile.dataset.darkness) {
+            const x = i % gridSize;
+            const y = Math.floor(i / gridSize);
+
+            const computedStyle = window.getComputedStyle(tile);
+            const bgColor = computedStyle.backgroundColor;
+            const opacity = parseFloat(computedStyle.opacity || '1');
+
+            ctx.save();
+            ctx.globalAlpha = opacity;
+            ctx.fillStyle = bgColor;
+
+            if (isNeon) {
+              ctx.shadowColor = bgColor;
+              ctx.shadowBlur = 12;
+            }
+
+            // Draw tile cell with slight overlap to prevent gaps
+            ctx.fillRect(
+              x * tileSize,
+              y * tileSize,
+              Math.ceil(tileSize),
+              Math.ceil(tileSize)
+            );
+            ctx.restore();
+          }
+        }
+
+        // 4. Draw branding watermark at bottom right
+        ctx.save();
+        ctx.font = '600 22px Outfit, sans-serif';
+        ctx.fillStyle = isNeon ? 'rgba(0, 240, 255, 0.45)' : 'rgba(0, 0, 0, 0.35)';
+        ctx.textAlign = 'right';
+        ctx.fillText('Etch a Sketch PRO', exportSize - 28, exportSize - 28);
+        ctx.restore();
+
+        // 5. Export as JPG and trigger download
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+        const link = document.createElement('a');
+        const timestamp = new Date().toISOString().slice(0, 10);
+        link.download = `etch-a-sketch-${timestamp}.jpg`;
+        link.href = dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        if (btnTextEl) btnTextEl.textContent = 'Saved! ✓';
+      } catch (err) {
+        console.error('Failed to save sketch:', err);
+        if (btnTextEl) btnTextEl.textContent = 'Error Saving';
+      } finally {
+        setTimeout(() => {
+          if (btnTextEl) btnTextEl.textContent = originalText;
+          saveBtn.classList.remove('saved-feedback');
+        }, 2000);
+      }
+    }, 50);
   }
 
   /* ==========================================================================
@@ -461,7 +565,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Clear Action
+  // Action Buttons
+  if (saveBtn) saveBtn.addEventListener('click', saveSketch);
   clearBtn.addEventListener('click', clearScreen);
 
   // Initialize Default Grid
