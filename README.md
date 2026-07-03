@@ -37,6 +37,8 @@ You only need a modern web browser (Chrome, Firefox, Safari, Edge).
 
 ### Installation & Run
 
+Because this project utilizes modern **Native ES6 Modules** (`<script type="module">`), browsers enforce strict CORS policies that prevent loading modules over simple `file://` protocols. To run the app locally, start a lightweight development server:
+
 1. Clone the repository:
    ```bash
    git clone https://github.com/hamilto8/etch-a-sketch.git
@@ -45,12 +47,10 @@ You only need a modern web browser (Chrome, Firefox, Safari, Edge).
    ```bash
    cd etch-a-sketch
    ```
-3. Open `index.html` in your favorite web browser:
-   * **macOS:** `open index.html`
-   * **Windows:** `start index.html`
-   * **Linux:** `xdg-open index.html`
-   
-Alternatively, you can run a local server (e.g., Live Server extension in VS Code, or using Python: `python3 -m http.server 8000`).
+3. Start a local server (choose one):
+   * **Python 3:** `python3 -m http.server 8000` (then open `http://localhost:8000`)
+   * **VS Code:** Install and click **"Go Live"** with the *Live Server* extension.
+   * **Node / npx:** `npx serve .`
 
 ## 📁 Repository Structure
 
@@ -59,9 +59,16 @@ etch-a-sketch/
 ├── images/
 │   ├── etch.ico         # Favicon icon
 │   └── etch.png         # Logo asset
+├── js/                  # Native ES6+ Modular Architecture
+│   ├── dom.js           # DOM elements cache and initialization
+│   ├── state.js         # Reactive global application state
+│   ├── grid.js          # DocumentFragment rendering, styling, & event delegation
+│   ├── knobs.js         # Tablet multi-touch knob rotation & keyboard navigation
+│   ├── export.js        # Synchronous HTML5 canvas rendering & JPG export
+│   ├── ui.js            # Control panel, themes, & drawing mode event handlers
+│   └── main.js          # Application entry point & subsystem bootstrap
 ├── index.html           # Semantic HTML5 layout and accessible control structure
 ├── index.css            # Responsive CSS3 styles, layout systems, & animations
-├── index.js             # High-performance event handlers & state management
 ├── LICENSE              # MIT Open Source License
 └── README.md            # Project documentation (this file)
 ```
