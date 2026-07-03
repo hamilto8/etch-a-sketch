@@ -149,16 +149,31 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
+   * Update accessibility ARIA attributes on knobs
+   */
+  function updateKnobAria(knobEl, angle) {
+    if (!knobEl) return;
+    const normalized = ((Math.round(angle) % 360) + 360) % 360;
+    knobEl.setAttribute('aria-valuenow', normalized.toString());
+  }
+
+  /**
    * Rotate knobs slightly on draw actions to simulate physical mechanism
    */
   function rotateKnob(axis, direction = 1) {
     const delta = direction * 15;
     if (axis === 'x') {
       state.knobAngleX += delta;
-      if (knobLeft) knobLeft.style.transform = `rotate(${state.knobAngleX}deg)`;
+      if (knobLeft) {
+        knobLeft.style.transform = `rotate(${state.knobAngleX}deg)`;
+        updateKnobAria(knobLeft, state.knobAngleX);
+      }
     } else {
       state.knobAngleY += delta;
-      if (knobRight) knobRight.style.transform = `rotate(${state.knobAngleY}deg)`;
+      if (knobRight) {
+        knobRight.style.transform = `rotate(${state.knobAngleY}deg)`;
+        updateKnobAria(knobRight, state.knobAngleY);
+      }
     }
   }
 
@@ -284,7 +299,11 @@ document.addEventListener('DOMContentLoaded', () => {
     knobEl.addEventListener('pointerdown', (e) => {
       isDragging = true;
       knobEl.classList.add('dragging');
-      knobEl.setPointerCapture(e.pointerId);
+      try {
+        knobEl.setPointerCapture(e.pointerId);
+      } catch (err) {
+        // Fallback for environments without pointer capture support
+      }
       startAngle = getAngle(e);
       currentRotation = axis === 'x' ? state.knobAngleX : state.knobAngleY;
       accumulatedDelta = 0;
@@ -303,6 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const newRotation = currentRotation + angleDiff;
       knobEl.style.transform = `rotate(${newRotation}deg)`;
+      updateKnobAria(knobEl, newRotation);
       
       if (axis === 'x') {
         state.knobAngleX = newRotation;
@@ -338,6 +358,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!isDragging) return;
       isDragging = false;
       knobEl.classList.remove('dragging');
+      try {
+        if (knobEl.hasPointerCapture(e.pointerId)) {
+          knobEl.releasePointerCapture(e.pointerId);
+        }
+      } catch (err) {
+        // Fallback cleanup
+      }
     };
 
     knobEl.addEventListener('pointerup', handleRelease);
