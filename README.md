@@ -7,7 +7,7 @@
 
 A premium, interactive, and high-performance web-based recreation of the classic mechanical drawing toy. Built from the ground up utilizing semantic HTML5, modern CSS3 (Custom Properties, Flexbox, Grid, Glassmorphism, Keyframes), and vanilla ES6+ JavaScript with strict accessibility (WCAG 2.1 AA) and performance optimizations.
 
-![Etch a Sketch Pro Screenshot](./images/etch.png) *(Note: Replace with your screenshot if desired)*
+![Etch a Sketch Pro Screenshot](./images/screenshot.jpg)
 
 ## 🌟 Features
 
@@ -58,7 +58,8 @@ Because this project utilizes modern **Native ES6 Modules** (`<script type="modu
 etch-a-sketch/
 ├── images/
 │   ├── etch.ico         # Favicon icon
-│   └── etch.png         # Logo asset
+│   ├── etch.png         # Logo asset
+│   └── screenshot.jpg   # Application preview screenshot
 ├── js/                  # Native ES6+ Modular Architecture
 │   ├── dom.js           # DOM elements cache and initialization
 │   ├── state.js         # Reactive global application state
