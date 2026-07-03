@@ -8,6 +8,7 @@ import { state } from './state.js';
 import { createGrid, setupGridInteraction } from './grid.js';
 import { setupInteractiveKnob, setupKeyboardControls } from './knobs.js';
 import { setupUIListeners } from './ui.js';
+import { initShakeToErase } from './motion.js';
 
 /**
  * Initialize all application subsystems once the document is ready
@@ -34,7 +35,10 @@ function initApp() {
   // 6. Bind control panel UI event listeners
   setupUIListeners();
 
-  // 7. Render initial canvas grid resolution
+  // 7. Initialize mobile accelerometer shake-to-erase detection
+  initShakeToErase();
+
+  // 8. Render initial canvas grid resolution
   createGrid(state.size);
 }
 
