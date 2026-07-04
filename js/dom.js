@@ -38,6 +38,6 @@ export function initDom() {
   dom.knobLeft = document.getElementById('knobLeft');
   dom.knobRight = document.getElementById('knobRight');
   dom.sizeButtons = document.querySelectorAll('.size-btn');
-  dom.modeButtons = document.querySelectorAll('.mode-btn');
+  dom.modeButtons = document.querySelectorAll('.tool-btn');
   dom.yearSpan = document.getElementById('year');
 }

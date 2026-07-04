@@ -63,6 +63,8 @@
   gap: 0.4rem;
   transition: all 0.2s ease;
   user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn:hover {
@@ -174,6 +176,7 @@ input[type="color"]::-webkit-color-swatch {
   background: rgba(0, 0, 0, 0.4);
   outline: none;
   margin: 0.5rem 0;
+  touch-action: manipulation;
 }
 
 .slider::-webkit-slider-thumb {

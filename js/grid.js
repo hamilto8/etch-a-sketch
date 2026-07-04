@@ -171,6 +171,17 @@ export function setupGridInteraction() {
   });
 
   // Touch move support for tablet & mobile screens when drawing directly on canvas
+  dom.screen.addEventListener('touchstart', (e) => {
+    state.isDrawing = true;
+    const touch = e.touches[0];
+    if (touch) {
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (target && target.classList.contains('tile')) {
+        applyColor(target);
+      }
+    }
+  }, { passive: true });
+
   dom.screen.addEventListener('touchmove', (e) => {
     if (state.hoverMode || state.isDrawing) {
       e.preventDefault();
@@ -181,4 +192,12 @@ export function setupGridInteraction() {
       }
     }
   }, { passive: false });
+
+  window.addEventListener('touchend', () => {
+    state.isDrawing = false;
+  });
+
+  window.addEventListener('touchcancel', () => {
+    state.isDrawing = false;
+  });
 }
