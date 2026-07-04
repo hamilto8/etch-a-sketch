@@ -9,6 +9,24 @@ import { createGrid, clearScreen } from './grid.js';
 import { saveSketch } from './export.js';
 
 /**
+ * Helper to bind both pointerdown (instant mobile tap) and click (desktop/accessibility) without duplicate execution
+ */
+function bindInstantAction(element, handler) {
+  if (!element) return;
+  let lastTouchTime = 0;
+
+  const wrappedHandler = (e) => {
+    const now = Date.now();
+    if (now - lastTouchTime < 300) return; // Prevent double firing from pointerdown followed by click
+    lastTouchTime = now;
+    handler(e);
+  };
+
+  element.addEventListener('pointerdown', wrappedHandler);
+  element.addEventListener('click', wrappedHandler);
+}
+
+/**
  * Bind event listeners to all interactive UI controls
  */
 export function setupUIListeners() {
@@ -38,7 +56,8 @@ export function setupUIListeners() {
   // Drawing Mode Selection (Color, Rainbow, Shader, Eraser)
   if (dom.modeButtons) {
     dom.modeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
+      bindInstantAction(btn, (e) => {
+        e.preventDefault();
         state.mode = btn.dataset.mode;
         dom.modeButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -48,7 +67,8 @@ export function setupUIListeners() {
 
   // Draw Mode Toggle (Hover Mode vs Click & Drag)
   if (dom.drawModeBtn) {
-    dom.drawModeBtn.addEventListener('click', () => {
+    bindInstantAction(dom.drawModeBtn, (e) => {
+      e.preventDefault();
       state.hoverMode = !state.hoverMode;
       dom.drawModeBtn.setAttribute('aria-pressed', (!state.hoverMode).toString());
       
@@ -67,7 +87,8 @@ export function setupUIListeners() {
 
   // Theme Toggle (Retro Silver vs Neon Midnight)
   if (dom.themeBtn && dom.screen && dom.colorPicker && dom.colorHex) {
-    dom.themeBtn.addEventListener('click', () => {
+    bindInstantAction(dom.themeBtn, (e) => {
+      e.preventDefault();
       const currentTheme = dom.themeBtn.dataset.theme || 'silver';
       if (currentTheme === 'silver') {
         state.theme = 'neon';
@@ -111,7 +132,8 @@ export function setupUIListeners() {
   // Quick Resolution Buttons
   if (dom.sizeButtons) {
     dom.sizeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
+      bindInstantAction(btn, (e) => {
+        e.preventDefault();
         const newSize = parseInt(btn.dataset.size, 10);
         createGrid(newSize);
       });
@@ -119,6 +141,6 @@ export function setupUIListeners() {
   }
 
   // Action Buttons
-  if (dom.saveBtn) dom.saveBtn.addEventListener('click', saveSketch);
-  if (dom.clearBtn) dom.clearBtn.addEventListener('click', clearScreen);
+  if (dom.saveBtn) bindInstantAction(dom.saveBtn, (e) => { e.preventDefault(); saveSketch(); });
+  if (dom.clearBtn) bindInstantAction(dom.clearBtn, (e) => { e.preventDefault(); clearScreen(); });
 }
