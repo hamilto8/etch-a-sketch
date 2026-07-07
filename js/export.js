@@ -86,21 +86,29 @@ export function saveSketch(e) {
     ctx.fillText('Etch a Sketch PRO', exportSize - 28, exportSize - 28);
     ctx.restore();
 
-    // 5. Export as JPG and trigger download synchronously within the active user gesture
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
-    const link = document.createElement('a');
-    const timestamp = new Date().toISOString().slice(0, 10);
-    link.download = `etch-a-sketch-${timestamp}.jpg`;
-    link.href = dataUrl;
-    link.target = '_blank'; // Fallback for WebViews or browsers where download attribute needs tab opening
-    document.body.appendChild(link);
-    link.click();
+    // 5. Export as JPG Blob and trigger download cleanly without Data URIs or new tab navigation
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        if (btnTextEl) btnTextEl.textContent = 'Error Saving';
+        return;
+      }
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const timestamp = new Date().toISOString().slice(0, 10);
+      link.download = `etch-a-sketch-${timestamp}.jpg`;
+      link.href = blobUrl;
+      link.rel = 'noopener noreferrer';
 
-    setTimeout(() => {
-      if (link.parentNode) document.body.removeChild(link);
-    }, 100);
+      document.body.appendChild(link);
+      link.click();
 
-    if (btnTextEl) btnTextEl.textContent = 'Saved! ✓';
+      setTimeout(() => {
+        if (link.parentNode) document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      }, 150);
+
+      if (btnTextEl) btnTextEl.textContent = 'Saved! ✓';
+    }, 'image/jpeg', 0.95);
   } catch (err) {
     console.error('Failed to save sketch:', err);
     if (btnTextEl) btnTextEl.textContent = 'Error Saving';
